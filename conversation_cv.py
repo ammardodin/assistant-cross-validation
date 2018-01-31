@@ -37,7 +37,6 @@ def load_data(data_path):
     Returns:
         ndarray: A numpy array with first column containing examples,
                  and second column containing corresponding labels
-
     """
     if not os.path.isfile(data_path):
         raise TypeError('{} is not a valid file'.format(data_path))
@@ -97,12 +96,11 @@ def run_cross_validation(folds, data):
         for example, label in test_data:
             res = conversation.message(workspace_id=wid,
                                        input={'text': example})
+            # ignore counter examples
             if len(res['intents']) < 1:
-                top_label = None
-                print(res)
-                print(label)
-            else:
-                top_label = res['intents'][0]['intent']
+                test_size -= 1
+                continue
+            top_label = res['intents'][0]['intent']
             if top_label == label:
                 correct += 1
 
