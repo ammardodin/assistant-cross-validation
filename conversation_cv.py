@@ -73,8 +73,7 @@ def run_cross_validation(folds, data):
     #     conversation.delete_workspace(workspace_id=workspace['workspace_id'])
 
     # loop through the k folds
-    for fold in folds:
-        train_indices, test_indices = fold
+    for train_indices, test_indices in folds:
         train_data = data[train_indices]
         test_data = data[test_indices]
         train_map = {label: map(CreateExample, [example[0] for example in examples])
