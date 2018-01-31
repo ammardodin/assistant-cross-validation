@@ -22,8 +22,8 @@ def make_folds(data, k, monte_carlo=True):
     Returns:
         iterator: An iterator over a list of folds
     """
-    kf = KFold(n_splits=k, shuffle=monte_carlo)
-    folds = kf.split(data[:, 0])
+    skf = StratifiedKFold(n_splits=k, shuffle=monte_carlo)
+    folds = skf.split(data[:, 0], data[:, 1])
     return folds
 
 
