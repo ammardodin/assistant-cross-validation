@@ -133,5 +133,5 @@ if __name__ == '__main__':
 
     # run cross-validation
     accuracies = run_cross_validation(folds, data)
-    avg_accuracy = sum(accuracies)/len(accuracies)
+    avg_accuracy = np.average(accuracies)
     print('Average accuracy: {:.4f}'.format(avg_accuracy))
