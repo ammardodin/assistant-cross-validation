@@ -1,5 +1,5 @@
 from __future__ import print_function, division
-from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
 from watson_developer_cloud import ConversationV1
 from watson_developer_cloud.conversation_v1 import CreateIntent, CreateExample
 from itertools import groupby
@@ -59,20 +59,20 @@ def run_cross_validation(folds, data):
         list: A list of the accuracies from each of the created workspaces
     """
 
-    # Array to hold accuracy for each fold
+    # array to hold accuracy for each fold
     accuracies = []
 
-    # Create a conversation service instance with your credentials
+    # create a conversation service instance with your credentials
     conversation = ConversationV1(username=os.environ['CONVERSATION_USERNAME'],
                                   password=os.environ['CONVERSATION_PASSWORD'],
                                   version='2017-05-26')
 
-    # Clean up from previous runs
+    # clean up from previous runs
     # existing_workspaces = conversation.list_workspaces()['workspaces']
     # for workspace in existing_workspaces:
     #     conversation.delete_workspace(workspace_id=workspace['workspace_id'])
 
-    # Loop through the k folds
+    # loop through the k folds
     for fold in folds:
         train_indices, test_indices = fold
         train_data = data[train_indices]
@@ -86,11 +86,11 @@ def run_cross_validation(folds, data):
             name='k-fold-test', intents=create_intent_objs)
         wid = res['workspace_id']
 
-        # Wait until training is done
+        # wait until training is done
         while conversation.get_workspace(wid)['status'] != 'Available':
             pass
 
-        # Test the workspace with the corresponding validation data
+        # test the workspace with the corresponding validation data
         test_size = len(test_indices)
         correct = 0
         for example, label in test_data:
@@ -104,12 +104,12 @@ def run_cross_validation(folds, data):
             if top_label == label:
                 correct += 1
 
-        # Save the fold accuracy and log it
+        # save the fold accuracy and log it
         accuracy = correct/test_size
         accuracies.append(accuracy)
         print('Accuracy: {:.4f}'.format(accuracy))
 
-        # Delete the created workspace
+        # delete the created workspace
         conversation.delete_workspace(workspace_id=wid)
 
     return accuracies
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     parser.add_argument('--folds', required=False, default=3, type=int)
     args = parser.parse_args()
 
-    # Get the command line arguments
+    # get the command line arguments
     data_path = os.path.expanduser(args.data)
     num_folds = args.folds
 
