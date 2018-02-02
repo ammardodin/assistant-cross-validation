@@ -15,8 +15,8 @@ pip install virtualenv
 4. Create a virtual environment and activate it via:
 
 ```
-virtualenv <name of virtual environment>
-source activate <name of virtual environment>/bin/activate
+virtualenv ENV
+source activate ENV/bin/activate
 ```
 
 5. Clone the repo and change your current working directory to that of the cloned repo.
