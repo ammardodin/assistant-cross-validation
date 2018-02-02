@@ -37,5 +37,5 @@ export CONVERSATION_PASSWORD=<your conversation service password>
 9. Run the script via the command below. The `--folds` argument is optional, but if provided, must be at least `2`.
 
 ```
-python --data <path to your data> --folds <number of folds>
+python conversation_cv.py --data <path to your data> --folds <number of folds>
 ```
