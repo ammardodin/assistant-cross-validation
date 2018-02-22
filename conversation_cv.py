@@ -1,5 +1,6 @@
 from __future__ import print_function, division
 from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import classification_report
 from watson_developer_cloud import ConversationV1
 from watson_developer_cloud.conversation_v1 import CreateIntent, CreateExample
 from itertools import groupby
@@ -88,30 +89,21 @@ def run_cross_validation(folds, data):
         # wait until training is done
         while conversation.get_workspace(wid)['status'] != 'Available':
             pass
-
+        
+        y_true=[]
+        y_pred=[]
         # test the workspace with the corresponding validation data
         test_size = len(test_indices)
         correct = 0
         for example, label in test_data:
             res = conversation.message(workspace_id=wid,
                                        input={'text': example})
-            # ignore counter examples
-            if len(res['intents']) < 1:
-                test_size -= 1
-                continue
             top_label = res['intents'][0]['intent']
-            if top_label == label:
-                correct += 1
+            y_true.append(top_label)
+            y_pred.append(label)
 
-        # save the fold accuracy and log it
-        accuracy = correct/test_size
-        accuracies.append(accuracy)
-        print('Accuracy: {:.4f}'.format(accuracy))
-
-        # delete the created workspace
-        conversation.delete_workspace(workspace_id=wid)
-
-    return accuracies
+        
+    return classification_report(y_true, y_pred)
 
 
 if __name__ == '__main__':
@@ -130,7 +122,5 @@ if __name__ == '__main__':
     # create the folds
     folds = make_folds(data, num_folds)
 
-    # run cross-validation
-    accuracies = run_cross_validation(folds, data)
-    avg_accuracy = np.average(accuracies)
-    print('Average accuracy: {:.4f}'.format(avg_accuracy))
+    # run cross-validation and print results to stdout
+    print(run_cross_validation(folds, data))
