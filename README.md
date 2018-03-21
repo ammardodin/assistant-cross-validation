@@ -1,6 +1,6 @@
-# Conversation-Cross-Validation
+# Assistant-Cross-Validation
 
-`Python` utility to cross-validate a conversation workspace
+`Python` utility to cross-validate an assistant workspace
 
 # Instructions
 
@@ -16,7 +16,7 @@ pip install virtualenv
 
 ```
 virtualenv ENV
-source activate ENV/bin/activate
+source ENV/bin/activate
 ```
 
 5. Clone the repo and change your current working directory to that of the cloned repo.
@@ -27,15 +27,15 @@ source activate ENV/bin/activate
 pip install -r requirements.txt
 ```
 
-8. Export your conversation instance username and password as environment variables via the following commands:
+8. Export your assistant instance username and password as environment variables via the following commands:
 
 ```
-export CONVERSATION_USERNAME=<your conversation service username>
-export CONVERSATION_PASSWORD=<your conversation service password>
+export ASSISTANT_USERNAME=<your assistant service username>
+export ASSISTANT_PASSWORD=<your assistant service password>
 ```
 
 9. Run the script via the command below. The `--folds` argument is optional, but if provided, must be at least `2`.
 
 ```
-python conversation_cv.py --data <path to your data> --folds <number of folds>
+python assistant_cv.py --data <path to your data> --folds <number of folds>
 ```
