@@ -49,7 +49,7 @@ def load_data(data_path):
     return np.array(data)
 
 
-def run_cross_validation(fold, data):
+def validate_with_fold(fold, data):
     """
     Creates a workspace from the fold's training data, and
     computes classification metrics based on the fold's testing data.
@@ -102,8 +102,8 @@ def run_cross_validation(fold, data):
     return classification_report(y_true, y_pred)
 
 
-def run_cross_validation_helper(params):
-    return run_cross_validation(*params)
+def validate_with_fold_helper(params):
+    return validate_with_fold(*params)
 
 
 if __name__ == '__main__':
@@ -129,7 +129,7 @@ if __name__ == '__main__':
 
     # fire up the workers
     classification_reports = pool.map(
-        run_cross_validation_helper, zip(folds, repeat(data, num_folds)))
+        validate_with_fold_helper, zip(folds, repeat(data, num_folds)))
 
     pool.close()
     pool.join()
