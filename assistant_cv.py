@@ -10,7 +10,7 @@ from multiprocessing.pool import ThreadPool
 import numpy as np
 import argparse
 import os.path
-import csv
+import unicodecsv as csv
 
 
 def make_folds(data, k, monte_carlo=True):
@@ -43,8 +43,8 @@ def load_data(data_path):
     """
     if not os.path.isfile(data_path):
         raise TypeError('{} is not a valid file'.format(data_path))
-    with open(data_path) as data_file:
-        csv_reader = csv.reader(data_file)
+    with open(data_path, mode='rb') as data_file:
+        csv_reader = csv.reader(data_file, encoding='utf-8')
         data = [line for line in csv_reader]
     return np.array(data)
 
